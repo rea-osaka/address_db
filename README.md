@@ -5,6 +5,8 @@
 総務省のWebページで得られるデジタルデータを
 Rで扱うためのスクリプトを公開しています。
 
+総務省の全国地方公共団体コードのページは次の通りです。
+
 [http://www.soumu.go.jp/denshijiti/code.html](http://www.soumu.go.jp/denshijiti/code.html)
 
 ## データファイルの準備
