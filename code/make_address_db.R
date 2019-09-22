@@ -84,10 +84,10 @@ make_prefecture_code <- function(){
 read_cities <- function(csv_file_path){
   res <- read_csv(csv_file_path, locale = locale(encoding = "UTF-8"), 
                   col_names = c("団体コード",
-                                "都道府県名",
-                                "市区町村名",
-                                "都道府県名（よみ）",
-                                "市区町村名（よみ）"),
+                                "都道府県",
+                                "市区町村",
+                                "都道府県（よみ）",
+                                "市区町村（よみ）"),
                   col_types = cols(`団体コード` = col_double()),
                   skip = 1) 
   
@@ -97,9 +97,9 @@ read_cities <- function(csv_file_path){
   res <- res %>% 
     mutate(`団体コード` = sprintf("%06d",`団体コード` )) %>% 
     mutate(`団体コード` = str_sub(`団体コード`,1,5))  %>%
-    select(`団体コード`,`市区町村名`,`市区町村名（よみ）`) %>%
-    filter(! is.na(`市区町村名`)) %>% 
-    mutate(`市区町村名（よみ）` = hankana2zenkana(`市区町村名（よみ）`))
+    select(`団体コード`,`市区町村`,`市区町村（よみ）`) %>%
+    filter(! is.na(`市区町村`)) %>% 
+    mutate(`市区町村（よみ）` = hankana2zenkana(`市区町村（よみ）`))
 
   return(res)  
 }
@@ -108,8 +108,8 @@ read_cities <- function(csv_file_path){
 read_big_cities <- function(path){
   res <- read_csv(path, locale = locale(encoding = "UTF-8"), 
                   col_names = c("団体コード",
-                                "市区町村名",
-                                "市区町村名（よみ）"),
+                                "市区町村",
+                                "市区町村（よみ）"),
                   col_types = cols(`団体コード` = col_double())) 
   res <- res %>% 
     mutate(`団体コード` = sprintf("%06d",`団体コード` )) %>% 
@@ -125,7 +125,7 @@ read_delete_cities <- function(path){
       mutate(X9 = myseq(X9,"〃")) %>% 
       filter(X9 == "欠番") %>% select(-X9)
 
-    colnames(target) <- c("団体コード", "市区町村名","市区町村名（よみ）")
+    colnames(target) <- c("団体コード", "市区町村","市区町村（よみ）")
     
     target <- target %>% mutate(`団体コード` = str_sub(`団体コード`,1,5)) 
 
@@ -142,7 +142,7 @@ make_city_code_db <- function(city_path, big_city_path, history_path){
     ans_db <- bind_rows(cities, big_cities, hist_sities) 
 
     prefecture_db <- make_prefecture_code()
-    colnames(prefecture_db) <- c("団体コード", "都道府県名","都道府県名（よみ）")
+    colnames(prefecture_db) <- c("団体コード", "都道府県","都道府県（よみ）")
     
     # 都道府県名列等を付け加える
     ans_db <- ans_db %>% 
